@@ -1,3 +1,4 @@
+<script src="../dist/vue-owl-carousel.min.js"></script>
 <template>
   <div>
     <span v-show="showPrev" :id="prevHandler">
@@ -21,6 +22,10 @@ import events from './utils/events';
 export default {
   name: 'VOwlCarousel',
   props: {
+    mouseScrollable: {
+      type: Boolean,
+      default: false,
+    },
     items: {
       type: Number,
       default: 3,
@@ -296,6 +301,18 @@ export default {
       });
     });
 
+    if(this.mouseScrollable){
+      owl.on('mousewheel', '.owl-stage', (event) => {
+
+        if (event.originalEvent.deltaY>0) {
+            owl.trigger('next.owl');
+        } else {
+            owl.trigger('prev.owl');
+        }
+        event.preventDefault();
+      });
+    }
+    
     if (!this.loop) {
       owl.on('changed.owl.carousel', (event) => {
         // start
